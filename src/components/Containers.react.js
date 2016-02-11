@@ -7,7 +7,6 @@ import ContainerList from './ContainerList.react';
 import Header from './Header.react';
 import metrics from '../utils/MetricsUtil';
 import shell from 'shell';
-import machine from '../utils/DockerMachineUtil';
 
 var Containers = React.createClass({
   contextTypes: {
@@ -99,7 +98,6 @@ var Containers = React.createClass({
     metrics.track('Opened Docker Terminal', {
       from: 'app'
     });
-    machine.dockerTerminal();
   },
 
   handleClickReportIssue: function () {

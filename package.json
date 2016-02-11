@@ -3,13 +3,13 @@
   "version": "0.0.1",
   "author": "alexandrev",
   "description": "Simple XPath Tool.",
-  "homepage": "https://kitematic.com/",
+  "homepage": "https://github.com/alexandrev/xpath.tool/",
   "main": "browser.js",
   "repository": {
     "type": "git",
-    "url": "git@github.com:kitematic/kitematic.git"
+    "url": "git@github.com:alexandrev/xpath.tool.git"
   },
-  "bugs": "https://github.com/kitematic/kitematic/issues",
+  "bugs": "https://github.com/alexandrev/xpath.tool/issues",
   "scripts": {
     "start": "grunt",
     "start-dev": "NODE_ENV=development grunt",

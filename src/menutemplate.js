@@ -4,8 +4,6 @@ import shell from 'shell';
 import router from './router';
 import util from './utils/Util';
 import metrics from './utils/MetricsUtil';
-import machine from './utils/DockerMachineUtil';
-import docker from './utils/DockerUtil';
 
 const app = remote.app;
 
@@ -13,17 +11,9 @@ const app = remote.app;
 var MenuTemplate = function () {
   return [
     {
-      label: 'Kitematic',
+      label: 'XPath Tool',
       submenu: [
       {
-        label: 'About Kitematic',
-        enabled: !!docker.host,
-        click: function () {
-          metrics.track('Opened About', {
-            from: 'menu'
-          });
-          router.get().transitionTo('about');
-        }
       },
       {
         type: 'separator'
@@ -31,7 +21,7 @@ var MenuTemplate = function () {
       {
         label: 'Preferences',
         accelerator: util.CommandOrCtrl() + '+,',
-        enabled: !!docker.host,
+        enabled: true,
         click: function () {
           metrics.track('Opened Preferences', {
             from: 'menu'
@@ -46,7 +36,7 @@ var MenuTemplate = function () {
         type: 'separator'
       },
       {
-        label: 'Hide Kitematic',
+        label: 'Hide XPath Tool',
         accelerator: util.CommandOrCtrl() + '+H',
         selector: 'hide:'
       },
@@ -74,20 +64,6 @@ var MenuTemplate = function () {
     {
       label: 'File',
       submenu: [
-      {
-        type: 'separator'
-      },
-      {
-        label: 'Open Docker Command Line Terminal',
-        accelerator: util.CommandOrCtrl() + '+Shift+T',
-        enabled: !!docker.host,
-        click: function() {
-          metrics.track('Opened Docker Terminal', {
-            from: 'menu'
-          });
-          machine.dockerTerminal();
-        }
-      }
       ]
     },
     {
@@ -164,7 +140,7 @@ var MenuTemplate = function () {
         type: 'separator'
       },
       {
-        label: 'Kitematic',
+        label: 'XPath Tool',
         accelerator: 'Cmd+0',
         click: function () {
           remote.getCurrentWindow().show();
@@ -181,7 +157,7 @@ var MenuTemplate = function () {
             metrics.track('Opened Issue Reporter', {
               from: 'menu'
             });
-            shell.openExternal('https://github.com/kitematic/kitematic/issues/new');
+            shell.openExternal('https://github.com/alexandrev/xpath-tool/issues/new');
           }
         }
       ]

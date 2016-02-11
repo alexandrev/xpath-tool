@@ -75,7 +75,7 @@ app.on('ready', function () {
   });
 
   mainWindow.webContents.on('did-finish-load', function () {
-    mainWindow.setTitle('Kitematic');
+    mainWindow.setTitle('XPath Tool');
     mainWindow.show();
     mainWindow.focus();
   });

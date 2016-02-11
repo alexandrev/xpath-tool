@@ -6,7 +6,6 @@ const remote = electron.remote;
 const dialog = remote.dialog;
 import metrics from '../utils/MetricsUtil';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
-import containerActions from '../actions/ContainerActions';
 
 var ContainerListItem = React.createClass({
   handleItemMouseEnter: function () {

@@ -6,8 +6,6 @@ import electron from 'electron';
 const remote = electron.remote;
 const Menu = remote.Menu;
 const MenuItem = remote.MenuItem;
-import accountStore from '../stores/AccountStore';
-import accountActions from '../actions/AccountActions';
 import Router from 'react-router';
 import classNames from 'classnames';
 
@@ -59,7 +57,7 @@ var Header = React.createClass({
   },
   handleFullscreenHover: function () {
     this.update();
-  },  
+  },
   renderWindowButtons: function () {
     let buttons;
     if (util.isWindows()) {
