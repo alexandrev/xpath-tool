@@ -28,7 +28,6 @@ var ContainerListItem = React.createClass({
           from: 'list',
           type: 'existing'
         });
-        containerActions.destroy(this.props.container.Name);
       }
     }.bind(this));
   },

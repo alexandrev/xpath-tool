@@ -2,7 +2,7 @@ import $ from 'jquery';
 import _ from 'underscore';
 import React from 'react';
 import Router from 'react-router';
-import containerStore from '../stores/ContainerStore';
+import snippetStore from '../stores/SnippetStore';
 import ContainerList from './ContainerList.react';
 import Header from './Header.react';
 import metrics from '../utils/MetricsUtil';

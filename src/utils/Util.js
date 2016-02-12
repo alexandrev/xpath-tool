@@ -5,7 +5,6 @@ import path from 'path';
 import crypto from 'crypto';
 import electron from 'electron';
 const remote = electron.remote;
-const dialog = remote.dialog;
 const app = remote.app;
 
 module.exports = {
@@ -84,7 +83,9 @@ module.exports = {
     var settingsjson = {};
     try {
       settingsjson = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'settings.json'), 'utf8'));
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
     return settingsjson;
   },
   isOfficialRepo: function (name) {
@@ -158,5 +159,5 @@ module.exports = {
   },
   linuxToWindowsPath: function (linuxAbsPath) {
     return linuxAbsPath.replace('/c', 'C:').split('/').join('\\');
-  }  
+  }
 };

@@ -11,7 +11,7 @@ module.exports = React.createClass({
   getInitialState: function () {
     return {
       filePath: '',
-      xpathExpression: ''
+      xpathExpression: ''      
     };
   },
   handleChangeFilePath: function (e) {
