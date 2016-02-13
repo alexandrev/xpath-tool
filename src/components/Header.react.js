@@ -1,11 +1,7 @@
 import React from 'react/addons';
-import RetinaImage from 'react-retina-image';
 import util from '../utils/Util';
-import metrics from '../utils/MetricsUtil';
 import electron from 'electron';
 const remote = electron.remote;
-const Menu = remote.Menu;
-const MenuItem = remote.MenuItem;
 import Router from 'react-router';
 import classNames from 'classnames';
 
@@ -14,11 +10,10 @@ var Header = React.createClass({
   getInitialState: function () {
     return {
       fullscreen: false,
-      updateAvailable: false,
+      updateAvailable: false
     };
   },
   update: function () {
-    let accountState = accountStore.getState();
     this.setState({
     });
   },
@@ -88,10 +83,10 @@ var Header = React.createClass({
     return (
       <div className={headerClasses}>
         <div className="left-header">
-          {util.isWindows () ?  '' : this.renderWindowButtons() }
+          {util.isWindows() ? '' : this.renderWindowButtons() }
         </div>
         <div className="right-header">
-          {util.isWindows () ? this.renderWindowButtons() : ''}
+          {util.isWindows() ? this.renderWindowButtons() : ''}
         </div>
       </div>
     );
@@ -105,10 +100,10 @@ var Header = React.createClass({
     return (
       <div className={headerClasses}>
         <div className="left-header">
-          {util.isWindows () ? null : this.renderWindowButtons()}
+          {util.isWindows() ? null : this.renderWindowButtons()}
         </div>
         <div className="right-header">
-          {util.isWindows () ? this.renderWindowButtons() : null}
+          {util.isWindows() ? this.renderWindowButtons() : null}
         </div>
       </div>
     );

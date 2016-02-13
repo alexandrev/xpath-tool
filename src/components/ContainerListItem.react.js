@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import React from 'react/addons';
-import Router from 'react-router';
 import electron from 'electron';
 const remote = electron.remote;
 const dialog = remote.dialog;
@@ -16,14 +15,18 @@ var ContainerListItem = React.createClass({
     var $action = $(this.getDOMNode()).find('.action');
     $action.hide();
   },
+  handleClick: function () {
+    this.props.current(this.props.container.name );
+  },
   handleDeleteContainer: function (e) {
     e.preventDefault();
     e.stopPropagation();
     dialog.showMessageBox({
-      message: 'Are you sure you want to stop & remove this container?',
+      message: 'Are you sure you want to remove this snippet?',
       buttons: ['Remove', 'Cancel']
     }, function (index) {
       if (index === 0) {
+        this.props.delete(this.props.container);
         metrics.track('Deleted Container', {
           from: 'list',
           type: 'existing'
@@ -34,72 +37,26 @@ var ContainerListItem = React.createClass({
   render: function () {
     var self = this;
     var container = this.props.container;
-    var imageNameTokens = container.Config.Image.split('/');
-    var repo;
-    if (imageNameTokens.length > 1) {
-      repo = imageNameTokens[1];
-    } else {
-      repo = imageNameTokens[0];
-    }
+    var repo = container.Name;
     var imageName = (
-      <OverlayTrigger placement="bottom" overlay={<Tooltip>{container.Config.Image}</Tooltip>}>
+      <OverlayTrigger placement="bottom" overlay={<Tooltip>{container.Name}</Tooltip>}>
         <span>{repo}</span>
       </OverlayTrigger>
     );
 
-    // Synchronize all animations
-    var style = {
-      WebkitAnimationDelay: 0 + 'ms'
-    };
-
     var state;
-    if (container.State.Downloading) {
-      state = (
-        <OverlayTrigger placement="bottom" overlay={<Tooltip>Downloading</Tooltip>}>
-          <div className="state state-downloading">
-            <div style={style} className="downloading-arrow"></div>
-          </div>
-        </OverlayTrigger>
-      );
-    } else if (container.State.Running && !container.State.Paused) {
-      state = (
-        <OverlayTrigger placement="bottom" overlay={<Tooltip>Running</Tooltip>}>
-          <div className="state state-running"><div style={style} className="runningwave"></div></div>
-        </OverlayTrigger>
-      );
-    } else if (container.State.Restarting) {
-      state = (
-        <OverlayTrigger placement="bottom" overlay={<Tooltip>Restarting</Tooltip>}>
-          <div className="state state-restarting" style={style}></div>
-        </OverlayTrigger>
-      );
-    } else if (container.State.Paused) {
-      state = (
-        <OverlayTrigger placement="bottom" overlay={<Tooltip>Paused</Tooltip>}>
-          <div className="state state-paused"></div>
-        </OverlayTrigger>
-      );
-    } else if (container.State.ExitCode) {
-      state = (
-        <OverlayTrigger placement="bottom" overlay={<Tooltip>Stopped</Tooltip>}>
-          <div className="state state-stopped"></div>
-        </OverlayTrigger>
-      );
-    } else {
-      state = (
-        <OverlayTrigger placement="bottom" overlay={<Tooltip>Stopped</Tooltip>}>
-          <div className="state state-stopped"></div>
-        </OverlayTrigger>
-      );
-    }
+    state = (
+      <OverlayTrigger placement="bottom" overlay={<Tooltip>Stopped</Tooltip>}>
+        <div className="state state-stopped"></div>
+      </OverlayTrigger>
+    );
 
     return (
-      <Router.Link to="container" params={{name: container.Name}}>
-        <li onMouseEnter={self.handleItemMouseEnter} onMouseLeave={self.handleItemMouseLeave} onClick={self.handleClick}>
+        <li id={container.name} onMouseEnter={self.handleItemMouseEnter} onMouseLeave={self.handleItemMouseLeave} onClick={self.handleClick}>
           {state}
           <div className="info">
             <div className="name">
-              {container.Name}
+              {container.name}
             </div>
             <div className="image">
               {imageName}
@@ -109,7 +66,6 @@ var ContainerListItem = React.createClass({
             <span className="btn circular" onClick={this.handleDeleteContainer}><span className="icon icon-delete"></span></span>
           </div>
         </li>
-      </Router.Link>
     );
   }
 });

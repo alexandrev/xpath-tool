@@ -16,13 +16,11 @@ if (!isWin) {
   process.env.PATH = '/usr/local/bin:' + process.env.PATH;
 }
 
-var size = {}, settingsjson = {};
+var size = {};
 try {
   size = JSON.parse(fs.readFileSync(path.join(process.env[isWin ? 'USERPROFILE' : 'HOME'], 'Library', 'Application\ Support', 'Kitematic', 'size')));
 } catch (err) {}
-try {
-  settingsjson = JSON.parse(fs.readFileSync(path.join(__dirname, 'settings.json'), 'utf8'));
-} catch (err) {}
+
 
 app.on('ready', function () {
   var mainWindow = new BrowserWindow({
