@@ -8,7 +8,7 @@ var ContainerList = React.createClass({
   render: function () {
     var containers = this.props.containers.map(container => {
       return (
-        <ContainerListItem key={container.Id} container={container} start={this.start} />
+        <ContainerListItem key={container.name} container={container} current={this.props.update} delete={this.props.delete} /> 
       );
     });
     return (

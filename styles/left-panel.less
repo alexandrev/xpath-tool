@@ -67,68 +67,7 @@
           top: 9px;
         }
       }
-      a {
-        color: inherit;
-        flex-shrink: 0;
-        cursor: default;
-        outline: none;
-        &:hover {
-          text-decoration: none;
-          cursor: default;
-        }
-        &:first-child {
-          li {
-            //border-top: 1px solid @color-divider;
-          }
-        }
-        &:focus {
-          text-decoration: none;
-        }
-        &.active {
-          background: @brand-action;
-          li {
-            height: 45px;
-            border-bottom: none;
-            background-color: @brand-primary;
-            .name {
-              color: white;
-            }
-            .image {
-              color: white;
-              opacity: 0.8;
-            }
-            .action {
-              .btn {
-                border: 1px solid white;
-                .icon {
-                  color: white;
-                }
-              }
-            }
-            .state-new {
-              .at2x('container-white.png', @container-state-size, @container-state-size);
-            }
-            .state-running {
-              .at2x('running-white.png', @container-state-size, @container-state-size);
-              .runningwave {
-                .at2x('runningwave-white.png', @container-state-size, @container-state-size);
-              }
-            }
-            .state-paused {
-              .at2x('wavy-white.png', @container-state-size, @container-state-size);
-            }
-            .state-stopped {
-              .at2x('stopped-white.png', @container-state-size, @container-state-size);
-            }
-            .state-downloading {
-              .at2x('downloading-white.png', @container-state-size, @container-state-size);
-              .downloading-arrow {
-                .at2x('downloading-arrow-white.png', @container-state-size, @container-state-size);
-              }
-            }
-          }
-        }
-      }
+
       li {
         vertical-align: middle;
         padding: 0.5rem 1rem 0.7rem 1.4rem;
@@ -236,6 +175,48 @@
           -webkit-animation-timing-function: linear;
         }
       }
+
+        li.active{
+          height: 45px;
+          border-bottom: none;
+          background-color: @brand-primary;
+          .name {
+            color: white;
+          }
+          .image {
+            color: white;
+            opacity: 0.8;
+          }
+          .action {
+            .btn {
+              border: 1px solid white;
+              .icon {
+                color: white;
+              }
+            }
+          }
+          .state-new {
+            .at2x('container-white.png', @container-state-size, @container-state-size);
+          }
+          .state-running {
+            .at2x('running-white.png', @container-state-size, @container-state-size);
+            .runningwave {
+              .at2x('runningwave-white.png', @container-state-size, @container-state-size);
+            }
+          }
+          .state-paused {
+            .at2x('wavy-white.png', @container-state-size, @container-state-size);
+          }
+          .state-stopped {
+            .at2x('stopped-white.png', @container-state-size, @container-state-size);
+          }
+          .state-downloading {
+            .at2x('downloading-white.png', @container-state-size, @container-state-size);
+            .downloading-arrow {
+              .at2x('downloading-arrow-white.png', @container-state-size, @container-state-size);
+            }
+          }
+        }      
     }
   }
 }
