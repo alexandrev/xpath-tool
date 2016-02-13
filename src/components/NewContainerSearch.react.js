@@ -52,14 +52,13 @@ module.exports = React.createClass({
   },
   refreshFileContent: function (filePath) {
     if (filePath != null && filePath !== '') {
-
-      fs.readFile(filePath, 'utf8', function (err, data) {
-        if (err) {
-          return console.log(err);
-        }
+      let data = fs.readFileSync(filePath, 'utf8');
+      if (data !== null) {
         $('#fileContent').val(data);
         console.log(data);
-      });
+      }else {
+        $('#fileContent').val('');
+      }
     }else {
       $('#fileContent').val('');
     }
@@ -158,7 +157,7 @@ module.exports = React.createClass({
           <div className='new-container-header'>
             <div className='search-full'>
               <div className='search-bar'>
-                <input type='search' ref='searchInput' disabled={this.state.current.name === undefined} className='form-control' value={xpathExpression} onChange={this.handleChangeXPathExpression}/>
+                <input type='search' ref='searchInput' disabled={this.state.current.name === undefined} className='form-control' value={xpathExpression} onChange={this.handleChangeXPathExpression} />
                 <div className={magnifierClasses}></div>
                 <div className={loadingClasses}><div></div></div>
               </div>
