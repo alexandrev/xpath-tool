@@ -4,6 +4,9 @@ import classNames from 'classnames';
 import $ from 'jquery';
 import electron from 'electron';
 import fs from 'fs';
+import AceEditor from 'react-ace';
+import 'brace/mode/xml';
+import 'brace/theme/github';
 const remote = electron.remote;
 const dialog = remote.dialog;
 
@@ -31,9 +34,27 @@ module.exports = React.createClass({
       localStorage.setItem('snippets', JSON.stringify(this.props.containers));
     }
   },
+  getResultContent: function (xpathExpression,fileContent) {
+    var out = '';
+    var xpath = require('xpath.js'), dom = require('xmldom').DOMParser;
+    var xml = fileContent;
+    try {
+      if (xml != null && xml !== '') {
+        var doc = new dom().parseFromString(xml);
+        out = xpath(doc, xpathExpression).toString();
+        let current = this.state.current;
+        this.setOKStatus('');
+        current.xpath = xpathExpression;
+      }
+    } catch (err) {
+      this.setStatusError(err);
+      console.log(err);
+    }
+    return out;
+  },
   refreshResultView: function (xpathExpression) {
     var xpath = require('xpath.js'), dom = require('xmldom').DOMParser;
-    var xml = $('#fileContent').val();
+    var xml = this.getFileContent(this.state.current.filePath);
     try {
       if (xml != null && xml !== '') {
         var doc = new dom().parseFromString(xml);
@@ -49,6 +70,13 @@ module.exports = React.createClass({
       this.setStatusError(err);
       console.log(err);
     }
+  },
+  getFileContent: function (filePath) {
+    let out = '';
+    if (filePath != null && filePath !== '') {
+      out = fs.readFileSync(filePath, 'utf8');
+    }
+    return out;
   },
   refreshFileContent: function (filePath) {
     if (filePath != null && filePath !== '') {
@@ -129,8 +157,8 @@ module.exports = React.createClass({
 
     let xpathExpression = this.state.current.xpath;
     let filePath = this.state.current.filePath;
-    this.refreshFileContent(filePath);
-    this.refreshResultView(xpathExpression);
+    let fileContent = this.getFileContent(filePath);   
+    let resultContent = this.getResultContent(xpathExpression,fileContent);      
     return (
       <div className='details'>
         <div className='new-container'>
@@ -151,8 +179,8 @@ module.exports = React.createClass({
               <span className={`results-filter results-recommended tab`}>No Namespace</span>
             </div>
           </div>
-          <div className='panel-text'>
-            <textarea cols='40' rows='4' readOnly='readonly' className='large-panel-text' disabled={this.state.current.name === undefined} id='fileContent'></textarea>
+          <div className="panel-text">
+            <AceEditor name='panel-text' readOnly='true' width='100%' height='300px' mode='xml' theme='github' value={fileContent}/>
           </div>
           <div className='new-container-header'>
             <div className='search-full'>
@@ -164,7 +192,7 @@ module.exports = React.createClass({
             </div>
             </div>
           <div className='small-panel-text'>
-            <textarea cols='40' rows='5' readOnly='readonly' className='mini-panel-text' id='resultViewer' disabled={this.state.current.name === undefined}></textarea>
+            <AceEditor name="small-panel-text" readOnly='true' width='100%' height='200px' mode='xml' theme='github' value={resultContent} />
           </div>
 
         </div>
