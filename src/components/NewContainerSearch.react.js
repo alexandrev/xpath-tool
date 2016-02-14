@@ -180,7 +180,7 @@ module.exports = React.createClass({
             </div>
           </div>
           <div className="panel-text">
-            <AceEditor name='panel-text' width='100%' height='300px' mode='xml' theme='github' value={fileContent}/>
+            <AceEditor name='panel-text' readOnly='true' width='100%' height='300px' mode='xml' theme='github' value={fileContent}/>
           </div>
           <div className='new-container-header'>
             <div className='search-full'>
@@ -192,7 +192,7 @@ module.exports = React.createClass({
             </div>
             </div>
           <div className='small-panel-text'>
-            <AceEditor name="small-panel-text" width='100%' height='200px' mode='xml' theme='github' value={resultContent} />
+            <AceEditor name="small-panel-text" readOnly='true' width='100%' height='200px' mode='xml' theme='github' value={resultContent} />
           </div>
 
         </div>
