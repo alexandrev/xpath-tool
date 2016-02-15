@@ -41,7 +41,10 @@ var Containers = React.createClass({
     }
 
     if (current != null) {
-      containers.pop(current);
+      var index = containers.indexOf(current);
+      if (index > -1) {
+        containers.splice(index, 1);
+      }
       localStorage.setItem('snippets', JSON.stringify(containers));
       this.setState({ containers: containers, updated: new Date()});
     }
