@@ -12,5 +12,8 @@ The expression available with be 2.0 compliant.
 #### Snippet support
 You'll be able to save the expression you have created inside the tool.
 
+### Drag & Drop support
+You'll be able to drag your files from any other application.
+
 ### Screenshot
 ![Image of XPath Tool](http://i.imgur.com/Obci3Mr.png)
