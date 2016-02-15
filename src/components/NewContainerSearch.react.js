@@ -185,7 +185,7 @@ module.exports = React.createClass({
             </div>
           </div>
           <div id="fileZone" className="panel-text" height='70%' >
-            <AceEditor name='panel-text' width='100%' readOnly='true'mode='xml' theme='github' value={fileContent}/>
+            <AceEditor name='panel-text' width='100%' readOnly={true} mode='xml' theme='github' value={fileContent}/>
           </div>
           <div className='new-container-header'>
             <div className='search-full'>
@@ -197,7 +197,7 @@ module.exports = React.createClass({
             </div>
             </div>
           <div className='small-panel-text' height='30%' width='100%'>
-            <AceEditor className='small-panel-text' width='100%' readOnly='true' mode='xml' theme='github' value={resultContent} />
+            <AceEditor className='small-panel-text' width='100%' readOnly={true} mode='xml' theme='github' value={resultContent} />
           </div>
 
         </div>
