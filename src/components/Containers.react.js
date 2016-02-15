@@ -4,6 +4,7 @@ import Router from 'react-router';
 import ContainerList from './ContainerList.react';
 import Header from './Header.react';
 import metrics from '../utils/MetricsUtil';
+import shell from 'shell';
 
 var Containers = React.createClass({
   contextTypes: {
@@ -168,6 +169,12 @@ var Containers = React.createClass({
       currentButtonLabel: ''
     });
   },
+  handleClickReportIssue: function () {
+    metrics.track('Opened Issue Reporter', {
+      from: 'app'
+    });
+    shell.openExternal('https://github.com/alexandrev/xpath-tool/issues/new');
+  },
 
   render: function () {
     var sidebarHeaderClass = 'sidebar-header';
@@ -191,6 +198,7 @@ var Containers = React.createClass({
               <ContainerList containers={this.state.containers} update={this.state.update} delete={this.state.delete}/>
             </section>
             <section className="sidebar-buttons">
+              <span className="btn-sidebar btn-feedback" onClick={this.handleClickReportIssue}><span className="icon icon-feedback"></span></span>
               <span className="btn-sidebar btn-preferences" onClick={this.handleClickPreferences} onMouseEnter={this.handleMouseEnterDockerTerminal} onMouseLeave={this.handleMouseLeaveDockerTerminal}><span className="icon icon-preferences"></span></span>
             </section>
           </div>
