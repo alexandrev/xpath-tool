@@ -24,8 +24,10 @@ module.exports = React.createClass({
     require('drag-and-drop-files')(dropTarget, function (files) {
       if ( files !== null && files.length > 0) {
         let current = self.state.current;
-        current.filePath = files[0].path;
-        self.setState({current: current});
+        if (current.name != null) {
+          current.filePath = files[0].path;
+          self.setState({current: current});
+        }
       }
     });
   },
