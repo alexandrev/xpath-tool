@@ -139,7 +139,7 @@ module.exports = React.createClass({
   handleChangeXPathExpression: function (e) {
     let xpathExpression = e.target.value;
     let current = this.state.current;
-    if (xpathExpression !== '' && xpathExpression !== current.xpath) {
+    if (xpathExpression != null && xpathExpression !== current.xpath) {
       current.xpath = xpathExpression;
       this.setState({current: current});
     }
