@@ -18,6 +18,17 @@ module.exports = React.createClass({
       fileContent: ''
     };
   },
+  componentDidMount: function () {
+    var dropTarget = document.getElementById('fileZone');
+    var self = this;
+    require('drag-and-drop-files')(dropTarget, function (files) {
+      if ( files !== null && files.length > 0) {
+        let current = self.state.current;
+        current.filePath = files[0].path;
+        self.setState({current: current});
+      }
+    });
+  },
   componentDidUpdate: function (prevProps, prevState) {
     if (prevProps !== this.props) {
       this.setState({
@@ -168,6 +179,8 @@ module.exports = React.createClass({
     let filePath = this.state.current.filePath;
     let fileContent = this.getFileContent(filePath);
     let resultContent = this.getResultContent(xpathExpression,fileContent);
+
+
     return (
       <div className='details'>
         <div className='new-container'>
@@ -188,7 +201,7 @@ module.exports = React.createClass({
               <span className={`results-filter results-recommended tab`}>No Namespace</span>
             </div>
           </div>
-          <div className="panel-text" height='70%' >
+          <div id="fileZone" className="panel-text" height='70%' >
             <AceEditor name='panel-text' width='100%' readOnly='true'mode='xml' theme='github' value={fileContent}/>
           </div>
           <div className='new-container-header'>
