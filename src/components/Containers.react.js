@@ -14,8 +14,11 @@ var Containers = React.createClass({
     let tmp = [];
     try {
       tmp = JSON.parse(localStorage.getItem('snippets'));
+      if (tmp === null) {
+        tmp = [];
+      }
     } catch (e) {
-
+      console.log(e);
     }
     return {
       sidebarOffset: 0,
