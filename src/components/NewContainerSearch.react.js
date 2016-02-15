@@ -47,22 +47,22 @@ module.exports = React.createClass({
       localStorage.setItem('snippets', JSON.stringify(this.props.containers));
     }
   },
-  getResultContent: function (xpathExpression,fileContent) {
+  getResultContent: function (xpathExpression, fileContent) {
     var out = '';
-    var xpath = require('xpath'), dom = require('xmldom').DOMParser;
+    var xpath = require('xpath'), ParseDOM = require('xmldom').DOMParser;
     var xml = fileContent;
     try {
       if (xml != null && xml !== '') {
-        var doc = new dom().parseFromString(xml);
+        var doc = new ParseDOM().parseFromString(xml);
         // TODO Namespace option setting
         let select = xpath.select;
-        if( true ) {
-          let namespacesMap = doc.documentElement._nsMap;
-          if (namespacesMap != null) {
-              select = xpath.useNamespaces(namespacesMap);
-          }
+        // if( true ) {
+        let namespacesMap = doc.documentElement._nsMap;
+        if (namespacesMap != null) {
+          select = xpath.useNamespaces(namespacesMap);
         }
-        out = select(xpathExpression,doc).toString();
+        // }
+        out = select(xpathExpression, doc).toString();
 
         let current = this.state.current;
         this.setOKStatus('');
@@ -73,25 +73,6 @@ module.exports = React.createClass({
       console.log(err);
     }
     return out;
-  },
-  refreshResultView: function (xpathExpression) {
-    var xpath = require('xpath'), dom = require('xmldom').DOMParser;
-    var xml = this.getFileContent(this.state.current.filePath);
-    try {
-      if (xml != null && xml !== '') {
-        var doc = new dom().parseFromString(xml);
-        var nodes = xpath.select(xpathExpression,doc);
-        let current = this.state.current;
-        $('#resultViewer').val(nodes);
-        this.setOKStatus('');
-        current.xpath = xpathExpression;
-      }else {
-        $('#resultViewer').val('');
-      }
-    } catch (err) {
-      this.setStatusError(err);
-      console.log(err);
-    }
   },
   getFileContent: function (filePath) {
     let out = '';
@@ -180,7 +161,7 @@ module.exports = React.createClass({
     let xpathExpression = this.state.current.xpath;
     let filePath = this.state.current.filePath;
     let fileContent = this.getFileContent(filePath);
-    let resultContent = this.getResultContent(xpathExpression,fileContent);
+    let resultContent = this.getResultContent(xpathExpression, fileContent);
 
 
     return (
@@ -189,11 +170,11 @@ module.exports = React.createClass({
           <div className='new-container-header'>
             <div className='search'>
               <div className='search-bar'>
-                <input type='search' id='filePath' ref='searchInput' disabled={this.state.current.name === undefined} onChange={this.handleChangeFilePath} className='form-control' placeholder='Feed me with some file path from your computer..' value={filePath} />
+                <input type='search' id='filePath' ref='searchInput' disabled={typeof this.state.current.name === 'undefined'} onChange={this.handleChangeFilePath} className='form-control' placeholder='Feed me with some file path from your computer..' value={filePath} />
                 <div className={magnifierClasses}></div>
                 <div className={loadingClasses}><div></div></div>
                 <div className='results-filters'>
-                  <span className='results-filter results-all tab'><button className='browse-button btn btn-primary' type='button' onClick={this.loadFilePath} disabled={this.state.current.name == undefined}> Browse </button></span>
+                  <span className='results-filter results-all tab'><button className='browse-button btn btn-primary' type='button' onClick={this.loadFilePath} disabled={typeof this.state.current.name === 'undefined'}> Browse </button></span>
                 </div>
               </div>
             </div>
@@ -209,7 +190,7 @@ module.exports = React.createClass({
           <div className='new-container-header'>
             <div className='search-full'>
               <div className='search-bar'>
-                <input type='search' ref='searchInput' disabled={this.state.current.name === undefined} className='form-control' value={xpathExpression} placeholder='Put your XPath Expression here :)' onChange={this.handleChangeXPathExpression} />
+                <input type='search' ref='searchInput' disabled={typeof this.state.current.name === 'undefined'} className='form-control' value={xpathExpression} placeholder='Put your XPath Expression here :)' onChange={this.handleChangeXPathExpression} />
                 <div className={magnifierClasses}></div>
                 <div className={loadingClasses}><div></div></div>
               </div>
