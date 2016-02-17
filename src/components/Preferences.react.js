@@ -6,7 +6,7 @@ var Preferences = React.createClass({
   mixins: [Router.Navigation],
   getInitialState: function () {
     return {
-      closeVMOnQuit: localStorage.getItem('settings.closeVMOnQuit') === 'true',
+      emptySnippetOnStartup: localStorage.getItem('settings.emptySnippetOnStartup') === 'true',
       metricsEnabled: metrics.enabled()
     };
   },
@@ -14,13 +14,13 @@ var Preferences = React.createClass({
     this.goBack();
     metrics.track('Went Back From Preferences');
   },
-  handleChangeCloseVMOnQuit: function (e) {
+  handleChangeEmptySnippetOnStartup: function (e) {
     var checked = e.target.checked;
     this.setState({
-      closeVMOnQuit: checked
+      emptySnippetOnStartup: checked
     });
-    localStorage.setItem('settings.closeVMOnQuit', checked);
-    metrics.track('Toggled Close VM On Quit', {
+    localStorage.setItem('settings.emptySnippetOnStartup', checked);
+    metrics.track('Toggled Empty Snippet on Startup', {
       close: checked
     });
   },
@@ -40,13 +40,13 @@ var Preferences = React.createClass({
     if (process.platform !== 'linux') {
       vmSettings = (
         <div>
-          <div className="title">VM Settings</div>
+          <div className="title"> General Settings</div>
           <div className="option">
             <div className="option-name">
-             Option 1
+             Create automatically a empty snippet on startup
             </div>
             <div className="option-value">
-              <input type="checkbox" checked={this.state.closeVMOnQuit} onChange={this.handleChangeCloseVMOnQuit}/>
+              <input type="checkbox" checked={this.state.emptySnippetOnStartup} onChange={this.handleChangeEmptySnippetOnStartup}/>
             </div>
           </div>
         </div>

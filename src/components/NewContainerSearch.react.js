@@ -30,6 +30,10 @@ module.exports = React.createClass({
         }
       }
     });
+    let newSnippetOnStartup = localStorage.getItem('settings.emptySnippetOnStartup');
+    if (newSnippetOnStartup && this.props.containers.length === 0) {
+      this.props.newSnippet();
+    }
   },
   componentDidUpdate: function (prevProps, prevState) {
     if (prevProps !== this.props) {

@@ -139,15 +139,12 @@ var Containers = React.createClass({
   },
   handleNewContainer: function () {
     $(this.getDOMNode()).find('.new-container-item').parent().fadeIn();
-
     let containers = this.state.containers;
     let name = this.generateName();
-
-    containers.push({ name: name, filePath: '', xpath: ''});
-    this.refreshCurrent();
+    let container = { name: name, filePath: '', xpath: ''};
+    containers.push(container);
     localStorage.setItem('snippets', JSON.stringify(this.state.containers));
-    this.setState({ containers: containers, updated: new Date()});
-
+    this.setState({ containers: containers, updated: new Date(), current: container});
     metrics.track('Pressed New Container');
   },
 
@@ -195,14 +192,14 @@ var Containers = React.createClass({
               </div>
             </section>
             <section className="sidebar-containers" onScroll={this.handleScroll}>
-              <ContainerList containers={this.state.containers} update={this.state.update} delete={this.state.delete}/>
+              <ContainerList containers={this.state.containers} update={this.state.update} delete={this.state.delete} />
             </section>
             <section className="sidebar-buttons">
               <span className="btn-sidebar btn-feedback" onClick={this.handleClickReportIssue}><span className="icon icon-feedback"></span></span>
               <span className="btn-sidebar btn-preferences" onClick={this.handleClickPreferences} onMouseEnter={this.handleMouseEnterDockerTerminal} onMouseLeave={this.handleMouseLeaveDockerTerminal}><span className="icon icon-preferences"></span></span>
             </section>
           </div>
-          <Router.RouteHandler containers={this.state.containers} container={container} />
+          <Router.RouteHandler containers={this.state.containers} container={container} newSnippet={this.handleNewContainer} />
         </div>
       </div>
     );
