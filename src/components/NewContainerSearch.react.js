@@ -53,20 +53,25 @@ module.exports = React.createClass({
   },
   getResultContent: function (xpathExpression, fileContent) {
     var out = '';
-    var xpath = require('xpath'), ParseDOM = require('xmldom').DOMParser;
+    var xmldom = require('xmldom');
+    var ParseDOM = xmldom.DOMParser;
+    var xpath=require('xpath2.js');
     var xml = fileContent;
     try {
       if (xml != null && xml !== '') {
         var doc = new ParseDOM().parseFromString(xml);
         // TODO Namespace option setting
-        let select = xpath.select;
+        let select = xpath;
         // if( true ) {
         let namespacesMap = doc.documentElement._nsMap;
         if (namespacesMap != null) {
-          select = xpath.useNamespaces(namespacesMap);
+          // select = xpath.useNamespaces(namespacesMap);
         }
         // }
-        out = select(xpathExpression, doc).toString();
+
+        if (xpathExpression != null && xpathExpression !== '' && !xpathExpression.endsWith("'") && !xpathExpression.endsWith("\"")){
+          out = xpath(doc,  xpathExpression).toString();
+        }
 
         let current = this.state.current;
         this.setOKStatus('');
