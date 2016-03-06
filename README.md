@@ -4,6 +4,11 @@
 
 It is a simple tool to create your XPath expression to run against your XML files. The idea is to provide a set of usefull capabilities without the need to load a big application like JDeveloper or Altova XMLSpy.
 
+### Download
+
+[Download Windows version](https://github.com/alexandrev/xpath-tool/blob/master/release/XPath-tool-Windows.zip)
+
+
 ### Features
 
 #### XPath 2.0 support
