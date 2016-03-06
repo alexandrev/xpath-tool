@@ -81,7 +81,7 @@ module.exports = function (grunt) {
           src: [BASENAME + '.exe']
         }],
         options: {
-          icon: 'util/kitematic.ico',
+          icon: 'util/xpath-tool.ico',
           'file-version': packagejson.version,
           'product-version': packagejson.version,
           'version-string': {
@@ -117,7 +117,7 @@ module.exports = function (grunt) {
           dest: 'build/'
         }, {
           cwd: 'node_modules/',
-          src: Object.keys(packagejson.dependencies).map(function (dep) { return dep + '/**/*';}),
+          src: ['**/*'],
           dest: 'build/node_modules/',
           expand: true
         }]
@@ -195,20 +195,6 @@ module.exports = function (grunt) {
             env: env
           }
         }
-      },
-      sign: {
-        options: {
-          failOnError: false,
-        },
-        command: [
-          'codesign --deep -v -f -s "<%= IDENTITY %>" <%= OSX_FILENAME_ESCAPED %>/Contents/Frameworks/*',
-          'codesign -v -f -s "<%= IDENTITY %>" <%= OSX_FILENAME_ESCAPED %>',
-          'codesign -vvv --display <%= OSX_FILENAME_ESCAPED %>',
-          'codesign -v --verify <%= OSX_FILENAME_ESCAPED %>'
-        ].join(' && '),
-      },
-      zip: {
-        command: 'ditto -c -k --sequesterRsrc --keepParent <%= OSX_FILENAME_ESCAPED %> release/' + BASENAME + '-Mac.zip',
       }
     },
 
@@ -225,7 +211,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           dot: true,
-          cwd: './dist/Kitematic-win32-x64',
+          cwd: './dist/XPath-tool-win32-x64',
           src: '**/*'
         }]
 	    },
@@ -256,7 +242,7 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('default', ['newer:babel', 'less', 'newer:copy:dev', 'shell:electron', 'watchChokidar']);
-  grunt.registerTask('release', ['clean:release', 'babel', 'less', 'copy:dev', 'electron', 'copy:osx', 'shell:sign', 'shell:zip', 'copy:windows', 'rcedit:exes', 'compress']);
+  grunt.registerTask('release', ['clean:release', 'babel', 'less', 'copy:dev', 'electron', 'copy:osx', 'copy:windows', 'compress']);
 
   process.on('SIGINT', function () {
     grunt.task.run(['shell:electron:kill']);
