@@ -4,6 +4,9 @@ import classNames from 'classnames';
 import $ from 'jquery';
 import electron from 'electron';
 import fs from 'fs';
+import AceEditor from 'react-ace';
+import 'brace/mode/xml';
+import 'brace/theme/github';
 const remote = electron.remote;
 const dialog = remote.dialog;
 
@@ -14,6 +17,23 @@ module.exports = React.createClass({
       current: this.props.container || {},
       fileContent: ''
     };
+  },
+  componentDidMount: function () {
+    var dropTarget = document.getElementById('fileZone');
+    var self = this;
+    require('drag-and-drop-files')(dropTarget, function (files) {
+      if ( files !== null && files.length > 0) {
+        let current = self.state.current;
+        if (current.name != null) {
+          current.filePath = files[0].path;
+          self.setState({current: current});
+        }
+      }
+    });
+    let newSnippetOnStartup = localStorage.getItem('settings.emptySnippetOnStartup');
+    if (newSnippetOnStartup && this.props.containers.length === 0) {
+      this.props.newSnippet();
+    }
   },
   componentDidUpdate: function (prevProps, prevState) {
     if (prevProps !== this.props) {
@@ -31,24 +51,39 @@ module.exports = React.createClass({
       localStorage.setItem('snippets', JSON.stringify(this.props.containers));
     }
   },
-  refreshResultView: function (xpathExpression) {
-    var xpath = require('xpath.js'), dom = require('xmldom').DOMParser;
-    var xml = $('#fileContent').val();
+  getResultContent: function (xpathExpression, fileContent) {
+    var out = '';
+    var xpath = require('xpath'), ParseDOM = require('xmldom').DOMParser;
+    var xml = fileContent;
     try {
       if (xml != null && xml !== '') {
-        var doc = new dom().parseFromString(xml);
-        var nodes = xpath(doc, xpathExpression);
+        var doc = new ParseDOM().parseFromString(xml);
+        // TODO Namespace option setting
+        let select = xpath.select;
+        // if( true ) {
+        let namespacesMap = doc.documentElement._nsMap;
+        if (namespacesMap != null) {
+          select = xpath.useNamespaces(namespacesMap);
+        }
+        // }
+        out = select(xpathExpression, doc).toString();
+
         let current = this.state.current;
-        $('#resultViewer').val(nodes);
         this.setOKStatus('');
         current.xpath = xpathExpression;
-      }else {
-        $('#resultViewer').val('');
       }
     } catch (err) {
       this.setStatusError(err);
       console.log(err);
     }
+    return out;
+  },
+  getFileContent: function (filePath) {
+    let out = '';
+    if (filePath != null && filePath !== '') {
+      out = fs.readFileSync(filePath, 'utf8');
+    }
+    return out;
   },
   refreshFileContent: function (filePath) {
     if (filePath != null && filePath !== '') {
@@ -89,7 +124,7 @@ module.exports = React.createClass({
   handleChangeXPathExpression: function (e) {
     let xpathExpression = e.target.value;
     let current = this.state.current;
-    if (xpathExpression !== '' && xpathExpression !== current.xpath) {
+    if (xpathExpression != null && xpathExpression !== current.xpath) {
       current.xpath = xpathExpression;
       this.setState({current: current});
     }
@@ -129,19 +164,21 @@ module.exports = React.createClass({
 
     let xpathExpression = this.state.current.xpath;
     let filePath = this.state.current.filePath;
-    this.refreshFileContent(filePath);
-    this.refreshResultView(xpathExpression);
+    let fileContent = this.getFileContent(filePath);
+    let resultContent = this.getResultContent(xpathExpression, fileContent);
+
+
     return (
       <div className='details'>
         <div className='new-container'>
           <div className='new-container-header'>
             <div className='search'>
               <div className='search-bar'>
-                <input type='search' id='filePath' ref='searchInput' disabled={this.state.current.name === undefined} onChange={this.handleChangeFilePath} className='form-control' value={filePath} />
+                <input type='search' id='filePath' ref='searchInput' disabled={typeof this.state.current.name === 'undefined'} onChange={this.handleChangeFilePath} className='form-control' placeholder='Feed me with some file path from your computer..' value={filePath} />
                 <div className={magnifierClasses}></div>
                 <div className={loadingClasses}><div></div></div>
                 <div className='results-filters'>
-                  <span className='results-filter results-all tab'><button className='browse-button btn btn-primary' type='button' onClick={this.loadFilePath} disabled={this.state.current.name == undefined}> Browse </button></span>
+                  <span className='results-filter results-all tab'><button className='browse-button btn btn-primary' type='button' onClick={this.loadFilePath} disabled={typeof this.state.current.name === 'undefined'}> Browse </button></span>
                 </div>
               </div>
             </div>
@@ -151,20 +188,20 @@ module.exports = React.createClass({
               <span className={`results-filter results-recommended tab`}>No Namespace</span>
             </div>
           </div>
-          <div className='panel-text'>
-            <textarea cols='40' rows='4' readOnly='readonly' className='large-panel-text' disabled={this.state.current.name === undefined} id='fileContent'></textarea>
+          <div id="fileZone" className="panel-text" height='70%' >
+            <AceEditor name='panel-text' width='100%' readOnly={true} mode='xml' theme='github' value={fileContent}/>
           </div>
           <div className='new-container-header'>
             <div className='search-full'>
               <div className='search-bar'>
-                <input type='search' ref='searchInput' disabled={this.state.current.name === undefined} className='form-control' value={xpathExpression} onChange={this.handleChangeXPathExpression} />
+                <input type='search' ref='searchInput' disabled={typeof this.state.current.name === 'undefined'} className='form-control' value={xpathExpression} placeholder='Put your XPath Expression here :)' onChange={this.handleChangeXPathExpression} />
                 <div className={magnifierClasses}></div>
                 <div className={loadingClasses}><div></div></div>
               </div>
             </div>
             </div>
-          <div className='small-panel-text'>
-            <textarea cols='40' rows='5' readOnly='readonly' className='mini-panel-text' id='resultViewer' disabled={this.state.current.name === undefined}></textarea>
+          <div className='small-panel-text' height='30%' width='100%'>
+            <AceEditor className='small-panel-text' width='100%' readOnly={true} mode='xml' theme='github' value={resultContent} />
           </div>
 
         </div>

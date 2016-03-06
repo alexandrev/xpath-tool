@@ -4,7 +4,6 @@ import path from 'path';
 import Promise from 'bluebird';
 import bugsnag from 'bugsnag-js';
 import util from './Util';
-import setupServerActions from '../actions/SetupServerActions';
 import metrics from './MetricsUtil';
 import router from '../router';
 

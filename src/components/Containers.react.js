@@ -4,6 +4,7 @@ import Router from 'react-router';
 import ContainerList from './ContainerList.react';
 import Header from './Header.react';
 import metrics from '../utils/MetricsUtil';
+import shell from 'shell';
 
 var Containers = React.createClass({
   contextTypes: {
@@ -14,8 +15,11 @@ var Containers = React.createClass({
     let tmp = [];
     try {
       tmp = JSON.parse(localStorage.getItem('snippets'));
+      if (tmp === null) {
+        tmp = [];
+      }
     } catch (e) {
-
+      console.log(e);
     }
     return {
       sidebarOffset: 0,
@@ -38,7 +42,10 @@ var Containers = React.createClass({
     }
 
     if (current != null) {
-      containers.pop(current);
+      var index = containers.indexOf(current);
+      if (index > -1) {
+        containers.splice(index, 1);
+      }
       localStorage.setItem('snippets', JSON.stringify(containers));
       this.setState({ containers: containers, updated: new Date()});
     }
@@ -132,15 +139,12 @@ var Containers = React.createClass({
   },
   handleNewContainer: function () {
     $(this.getDOMNode()).find('.new-container-item').parent().fadeIn();
-
     let containers = this.state.containers;
     let name = this.generateName();
-
-    containers.push({ name: name, filePath: '', xpath: ''});
-    this.refreshCurrent();
+    let container = { name: name, filePath: '', xpath: ''};
+    containers.push(container);
     localStorage.setItem('snippets', JSON.stringify(this.state.containers));
-    this.setState({ containers: containers, updated: new Date()});
-
+    this.setState({ containers: containers, updated: new Date(), current: container});
     metrics.track('Pressed New Container');
   },
 
@@ -162,6 +166,12 @@ var Containers = React.createClass({
       currentButtonLabel: ''
     });
   },
+  handleClickReportIssue: function () {
+    metrics.track('Opened Issue Reporter', {
+      from: 'app'
+    });
+    shell.openExternal('https://github.com/alexandrev/xpath-tool/issues/new');
+  },
 
   render: function () {
     var sidebarHeaderClass = 'sidebar-header';
@@ -182,13 +192,14 @@ var Containers = React.createClass({
               </div>
             </section>
             <section className="sidebar-containers" onScroll={this.handleScroll}>
-              <ContainerList containers={this.state.containers} update={this.state.update} delete={this.state.delete}/>
+              <ContainerList containers={this.state.containers} update={this.state.update} delete={this.state.delete} />
             </section>
             <section className="sidebar-buttons">
+              <span className="btn-sidebar btn-feedback" onClick={this.handleClickReportIssue}><span className="icon icon-feedback"></span></span>
               <span className="btn-sidebar btn-preferences" onClick={this.handleClickPreferences} onMouseEnter={this.handleMouseEnterDockerTerminal} onMouseLeave={this.handleMouseLeaveDockerTerminal}><span className="icon icon-preferences"></span></span>
             </section>
           </div>
-          <Router.RouteHandler containers={this.state.containers} container={container} />
+          <Router.RouteHandler containers={this.state.containers} container={container} newSnippet={this.handleNewContainer} />
         </div>
       </div>
     );

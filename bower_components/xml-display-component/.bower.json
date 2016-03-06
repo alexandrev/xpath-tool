@@ -1,0 +1,53 @@
+{
+  "name": "xml-display-component",
+  "version": "0.1.1",
+  "homepage": "https://github.com/marushkevych/xml-display-component",
+  "authors": [
+    "marushkevych <marushkevych@gmail.com>"
+  ],
+  "description": "Render foldable xml from json input",
+  "main": "xml-display-component.js",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "xml",
+    "display",
+    "component",
+    "tree",
+    "recursive",
+    "html",
+    "fold",
+    "foldable",
+    "expand",
+    "collapse",
+    "react",
+    "angular",
+    "json"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "example",
+    "node_modules",
+    "bower_components",
+    "src",
+    "Gruntfile.js",
+    "README.md",
+    "exmple.png",
+    "package.json"
+  ],
+  "dependencies": {
+    "underscore": "~1.7.0",
+    "react": "~0.12.2"
+  },
+  "_release": "0.1.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.1.1",
+    "commit": "021cae6d5e1136987a66fa963ba1c71766d4e120"
+  },
+  "_source": "git://github.com/marushkevych/xml-display-component.git",
+  "_target": "^0.1.1",
+  "_originalSource": "xml-display-component",
+  "_direct": true
+}
